@@ -1,0 +1,5 @@
+    <script n:if="strlen(@file_get_contents($browserSyncUrl)) && $presenter->context->parameters['environment']=='development'" id="__bs_script__">
+        //<![CDATA[
+        document.write("<script async src='{$browserSyncUrl|noescape}'><\/script>");
+        //]]>
+    </script>
