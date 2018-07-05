@@ -54,6 +54,8 @@ class BrowserSync extends Control implements ITemplatePath
     {
         $template = $this->getTemplate();
 
+        // danger on hosting: file_get_contents is disable on server!!
+        $template->enable = ($this->presenter->context->parameters['environment'] == 'development' && @file_get_contents($this->browserSyncUrl));
         $template->browserSyncUrl = $this->browserSyncUrl;
 
         $template->setFile($this->templatePath);
