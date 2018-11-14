@@ -29,7 +29,7 @@ neon configure:
 services:
     - BrowserSync
 #or    
-    - BrowserSync(other url)
+    - BrowserSync(other url, other check url)
 ```
 
 base presenter:
@@ -37,6 +37,7 @@ base presenter:
 protected function createComponentBrowserSync(BrowserSync $browserSync): BrowserSync
 {
     //$browserSync->setTemplatePath(__DIR__ . '/templates/browserSync.latte');
+    //$browserSync->setCheckByUrl(false);
     return $browserSync;
 }
 ```

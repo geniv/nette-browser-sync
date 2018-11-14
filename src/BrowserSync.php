@@ -13,24 +13,33 @@ class BrowserSync extends Control implements ITemplatePath
 {
     // define constant url
     const
-        BROWSER_SYNC_URL = 'http://HTTP_HOST:3000/browser-sync/browser-sync-client.js';
+        BROWSER_SYNC_URL = 'REQUEST_SCHEME://HTTP_HOST:3000/browser-sync/browser-sync-client.js',
+        CHECK_URL = 'http://localhost:3001';
 
     /** @var string */
-    private $browserSyncUrl;
+    private $browserSyncUrl, $checkUrl;
     /** @var string */
     private $templatePath;
+    /** @var bool */
+    private $isCheckByUrl = false;
 
 
     /**
      * BrowserSync constructor.
      *
-     * @param string $browserSyncUrl
+     * @param string      $browserSyncUrl
+     * @param string|null $checkUrl
      */
-    public function __construct(string $browserSyncUrl = '')
+    public function __construct(string $browserSyncUrl = null, string $checkUrl = null)
     {
         parent::__construct();
 
-        $this->browserSyncUrl = str_replace('HTTP_HOST', $_SERVER['HTTP_HOST'], $browserSyncUrl ?: self::BROWSER_SYNC_URL);
+        $replace = [
+            'HTTP_HOST'      => $_SERVER['HTTP_HOST'],
+            'REQUEST_SCHEME' => $_SERVER['REQUEST_SCHEME'],
+        ];
+        $this->browserSyncUrl = str_replace(array_keys($replace), $replace, $browserSyncUrl ?: self::BROWSER_SYNC_URL);
+        $this->checkUrl = $checkUrl ?: self::CHECK_URL;
 
         $this->templatePath = __DIR__ . '/BrowserSync.latte'; // set path
     }
@@ -48,6 +57,17 @@ class BrowserSync extends Control implements ITemplatePath
 
 
     /**
+     * Set check by url.
+     *
+     * @param bool $state
+     */
+    public function setCheckByUrl(bool $state)
+    {
+        $this->isCheckByUrl = $state;
+    }
+
+
+    /**
      * Render.
      */
     public function render()
@@ -55,7 +75,7 @@ class BrowserSync extends Control implements ITemplatePath
         $template = $this->getTemplate();
 
         // danger on hosting: file_get_contents is disable on server!!
-        $template->enable = ($this->presenter->context->parameters['environment'] == 'development' && @file_get_contents($this->browserSyncUrl));
+        $template->enable = ($this->presenter->context->parameters['environment'] == 'development' && @file_get_contents($this->isCheckByUrl ? $this->checkUrl : $this->browserSyncUrl));
         $template->browserSyncUrl = $this->browserSyncUrl;
 
         $template->setFile($this->templatePath);
