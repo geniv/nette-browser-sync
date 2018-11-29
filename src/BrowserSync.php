@@ -74,8 +74,10 @@ class BrowserSync extends Control implements ITemplatePath
     {
         $template = $this->getTemplate();
 
+        $arrContextOptions = stream_context_create(['ssl' => ['verify_peer' => false, 'verify_peer_name' => false]]);
         // danger on hosting: file_get_contents is disable on server!!
-        $template->enable = ($this->presenter->context->parameters['environment'] == 'development' && @file_get_contents($this->isCheckByUrl ? $this->checkUrl : $this->browserSyncUrl));
+        $template->enable = ($this->presenter->context->parameters['environment'] == 'development' &&
+            @file_get_contents($this->isCheckByUrl ? $this->checkUrl : $this->browserSyncUrl, false, $arrContextOptions));
         $template->browserSyncUrl = $this->browserSyncUrl;
 
         $template->setFile($this->templatePath);
