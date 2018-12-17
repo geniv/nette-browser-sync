@@ -1,6 +1,5 @@
 <?php declare(strict_types=1);
 
-use GeneralForm\ITemplatePath;
 use Nette\Application\UI\Control;
 
 
@@ -9,7 +8,7 @@ use Nette\Application\UI\Control;
  *
  * @author  geniv, MartinFugess
  */
-class BrowserSync extends Control implements ITemplatePath
+class BrowserSync extends Control implements IBrowserSync
 {
     // define constant url
     const
