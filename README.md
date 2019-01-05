@@ -34,7 +34,7 @@ services:
 
 base presenter:
 ```php
-protected function createComponentBrowserSync(BrowserSync $browserSync): BrowserSync
+protected function createComponentBrowserSync(IBrowserSync $browserSync): IBrowserSync
 {
     //$browserSync->setTemplatePath(__DIR__ . '/templates/browserSync.latte');
     //$browserSync->setCheckByUrl(false);

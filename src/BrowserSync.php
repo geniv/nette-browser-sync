@@ -35,7 +35,7 @@ class BrowserSync extends Control implements IBrowserSync
 
         $replace = [
             'HTTP_HOST'      => $_SERVER['HTTP_HOST'],
-            'REQUEST_SCHEME' => $_SERVER['REQUEST_SCHEME'],
+            'REQUEST_SCHEME' => $_SERVER['REQUEST_SCHEME'] ?? (isset($_SERVER['HTTPS']) ? 'https' : 'http'),
         ];
         $this->browserSyncUrl = str_replace(array_keys($replace), $replace, $browserSyncUrl ?: self::BROWSER_SYNC_URL);
         $this->checkUrl = $checkUrl ?: self::CHECK_URL;
